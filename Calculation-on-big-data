@@ -1,0 +1,109 @@
+
+##find and rank popular weekdays
+SELECT weekday, COUNT(ride_id) AS rides_count
+FROM bike_share_data.Q444_table 
+GROUP BY weekday 
+ORDER BY rides_count DESC; 
+
+##find and rank popular weekdays and group by member_casual
+SELECT weekday, member_casual, COUNT(ride_id) AS rides_count
+FROM bike_share_data.Q444_table 
+GROUP BY weekday, member_casual
+ORDER BY rides_count DESC; 
+
+##find and rank popular weekday & rank by avg trip duration
+SELECT weekday, member_casual, ROUND(AVG(DATE_DIFF(ended_at, started_at, minute)),2) AS avg_ride_duration
+FROM bike_share_data.Q444_table 
+GROUP BY weekday, member_casual
+ORDER BY avg_ride_duration DESC; 
+
+##find and rank popular hour of date
+SELECT hour, member_casual, COUNT(ride_id) AS rides_count
+FROM bike_share_data.Q444_table 
+GROUP BY hour, member_casual
+ORDER BY rides_count DESC; 
+
+##find and rank popular hour of date & rank by avg trip duration 
+SELECT hour, member_casual, ROUND(AVG(DATE_DIFF(ended_at, started_at, minute)),2) AS avg_ride_duration
+FROM bike_share_data.Q444_table 
+GROUP BY hour, member_casual
+ORDER BY avg_ride_duration DESC; 
+
+##find and rank popular month of date
+SELECT month, member_casual, COUNT(ride_id) AS rides_count
+FROM bike_share_data.Q444_table 
+GROUP BY month, member_casual
+ORDER BY rides_count DESC; 
+
+##find and rank popular month of date & rank by avg trip duration
+SELECT month, member_casual, ROUND(AVG(DATE_DIFF(ended_at, started_at, minute)),2) AS avg_ride_duration
+FROM bike_share_data.union_quarters  
+GROUP BY month, member_casual
+ORDER BY avg_ride_duration DESC; 
+
+##calculate average ride duration and rank by member type 'casual or member'
+SELECT member_casual,
+ROUND(AVG(DATE_DIFF(ended_at, started_at, minute)),2) AS avg_ride_duration
+FROM `bike_share_data.Q444_table`
+GROUP BY member_casual;
+
+##find top ten start/end station names
+SELECT
+  end_station_name, COUNT(*) AS count, member_casual
+FROM
+  bike_share_data.union_quarters 
+GROUP BY end_station_name, member_casual
+ORDER BY count DESC
+limit 10; 
+
+#===========================================================
+##finding top 10 starting and ending stations by member type
+#===========================================================
+WITH start_trips AS ( ##cte to contain start station names
+  SELECT
+    start_station_name,
+    member_casual,
+    COUNT(*) AS start_count,
+    RANK() OVER (PARTITION BY member_casual ORDER BY COUNT(*) DESC) AS rank
+    ##obtains ranking for each count of rider types
+  FROM `bike_share_data.union_quarters`
+  GROUP BY start_station_name, member_casual 
+  ##groups output by start station name and member type
+),
+
+end_trips AS ( ##cte to rank top 10 end station names
+  SELECT
+    end_station_name,
+    member_casual,
+    COUNT(*) AS end_count,
+    RANK() OVER (PARTITION BY member_casual ORDER BY COUNT(*) DESC) AS rank
+  FROM `bike_share_data.union_quarters`
+  GROUP BY end_station_name, member_casual
+)
+SELECT
+  s.start_station_name,
+  e.end_station_name,
+  s.member_casual,
+  s.start_count,
+  e.end_count
+FROM start_trips s
+JOIN end_trips e
+ON s.rank = e.rank AND s.member_casual = e.member_casual 
+##joins CTEs based on their ranking and member type
+WHERE s.rank <= 10
+ORDER BY s.member_casual, s.rank; 
+#===========================================================
+#===========================================================
+
+##popular bike type per member type percent
+SELECT member_casual, rideable_type,
+  COUNT(rideable_type) AS rideable_type_count,
+  ROUND((COUNT(rideable_type) / SUM(COUNT(rideable_type)) OVER(PARTITION BY member_casual) *100), 2) AS percentage
+FROM `bike_share_data.union_quarters`
+GROUP BY member_casual, rideable_type;
+
+##avg ride duration per member type
+SELECT member_casual,
+ROUND(AVG(DATE_DIFF(ended_at, started_at, minute)),0) AS avgMIN_ride_duration
+FROM `bike_share_data.union_quarters`
+GROUP BY member_casual; 
