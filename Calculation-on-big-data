@@ -52,7 +52,7 @@ SELECT
   end_station_name, COUNT(*) AS count, member_casual
 FROM
   bike_share_data.union_quarters 
-GROUP BY end_station_name, member_casual
+GROUP BY end_station_name, member_casual #group by top ten station names and user type
 ORDER BY count DESC
 limit 10; 
 
