@@ -1,0 +1,35 @@
+##check to see if any rows contain missing start_station_id
+SELECT
+  COUNT(*) AS num_rows_to_delete
+FROM
+  `bike_share_data.jan_2022`
+WHERE
+  start_station_id IS NULL;  
+
+##delete rows that are missing start_station_id value from table      
+DELETE
+  bike_share_data.jan_2022
+WHERE
+  start_station_id IS NULL;   
+
+
+##count duplicates
+SELECT ride_id, COUNT(*) as dup_count
+FROM `bike_share_data.union_quarters`
+GROUP BY ride_id
+HAVING COUNT(*) >1 
+
+##check for spaces before/after string values
+SELECT ride_id,
+start_station_id,
+end_station_id,
+member_casual
+FROM `bike_share_data.union_quarters`
+WHERE ride_id LIKE '% ' OR ride_id LIKE ' %'
+OR start_station_id LIKE '% ' OR ride_id LIKE ' %'
+OR member_casual LIKE '% ' OR ride_id LIKE ' %'; 
+
+##trim extra spaces
+UPDATE `bike_share_data.union_quarters`
+SET end_station_name = TRIM(end_station_name)
+WHERE end_station_name LIKE '% ' OR rideable_type LIKE ' %'
