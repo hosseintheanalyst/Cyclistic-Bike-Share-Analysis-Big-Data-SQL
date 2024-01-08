@@ -1,0 +1,65 @@
+#Create a table to hold quarterly data and 
+#initiate by first copying oct_2022 data into
+CREATE TABLE bike_share_data.Q444_table AS 
+SELECT* FROM `bike_share_data.oct_2022`; 
+
+#copy monthly data inidividually to newly made table
+#this code can be modified to insert all months of Q4 into Q444_table
+INSERT INTO `bike_share_data.Q444_table` (ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual)
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+FROM `bike_share_data.dec_2022` 
+
+
+##union/combine all quarters into new table for yearly view
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual, weekday, hour, month
+FROM `bike_share_data.Q111_table`
+UNION DISTINCT
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual, weekday, hour, month
+FROM `bike_share_data.Q222_table` 
+UNION DISTINCT
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual, weekday, hour, month
+FROM `bike_share_data.Q333_table`
+UNION DISTINCT
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual, weekday, hour, month
+FROM `bike_share_data.Q444_table` 
+
+
+##Create Table to hold final table of all the combined quarterly data
+CREATE TABLE bike_share_data.union_quarters AS (
+  SELECT DISTINCT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual, weekday, hour, month
+  FROM (
+    SELECT* FROM bike_share_data.Q111_table
+    UNION ALL
+    SELECT* FROM bike_share_data.Q222_table
+    UNION ALL
+    SELECT* FROM bike_share_data.Q333_table
+    UNION ALL
+    SELECT* FROM bike_share_data.Q444_table
+  )
+) 
+
+
+##add weekday column to the table 
+ALTER TABLE bike_share_data.Q444_table
+ADD COLUMN weekday INT;
+##update weekday column to represent the weekday
+UPDATE `bike_share_data.Q111_table`
+SET weekday = EXTRACT(DAYOFWEEK FROM started_at) 
+WHERE weekday IS NULL; 
+
+
+##add hour column to the table 
+ALTER TABLE bike_share_data.Q444_table
+ADD COLUMN hour INT;
+##update hour column to represent the hour component of date
+UPDATE `bike_share_data.Q111_table`
+SET hour = EXTRACT(HOUR FROM started_at) 
+WHERE hour IS NULL; 
+
+##add month column to the table 
+ALTER TABLE bike_share_data.Q111_table
+ADD COLUMN month INT;
+##update month column to represent the hour component of date
+UPDATE `bike_share_data.Q111_table`
+SET month = EXTRACT(MONTH FROM started_at) 
+WHERE month IS NULL; 
