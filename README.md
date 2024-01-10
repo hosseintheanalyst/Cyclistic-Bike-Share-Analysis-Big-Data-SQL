@@ -24,7 +24,7 @@ https://www.divvybikes.com/data-license-agreement
 
 Check out my Tableau insights dashboard:
 
-[Tableau Dashboard]([url](https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)
+[Tableau Viz Dashboard](https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)
 
 
 
