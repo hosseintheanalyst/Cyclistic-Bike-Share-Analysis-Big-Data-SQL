@@ -14,7 +14,9 @@ Currently the company has 3 products from which drive revenues at the company:
 
 In this version of my case study I chose SQL BigQuery as my primary tool for processing 4,000,000+ rows of data and create visuals. Unlike with spreadsheets, I did not need to subsample my data since R is more than capable to process large amounts of raw data. Therefore, there is no to subsample my data in this case which can potentially introduce bias to my final results. 
 
-Check out my Google Slides Presentation [here.](https://docs.google.com/presentation/d/1G00ROGhGqM4tyMIJNvty_k1UtfiKXv4DoIF8G0EOUi0/edit#slide=id.p)
+Check out my Tableau Visuals generated after processing data with SQL:
+
+[Tableau Viz Dashboard](https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)
 
 Raw data were obtained directly from Divvy and can be accessed via the link below:
 
@@ -24,9 +26,8 @@ License to use the data:
 
 https://www.divvybikes.com/data-license-agreement
 
-Check out my Tableau insights dashboard:
 
-[Tableau Viz Dashboard](https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)
+Check out my Google Slides Presentation [here.](https://docs.google.com/presentation/d/1G00ROGhGqM4tyMIJNvty_k1UtfiKXv4DoIF8G0EOUi0/edit#slide=id.p)
 
 # Check out this Case Study Completed with R [here.](https://github.com/hossvah/Cyclistic-Ride-Share-Big-Data-R/tree/main)
 
