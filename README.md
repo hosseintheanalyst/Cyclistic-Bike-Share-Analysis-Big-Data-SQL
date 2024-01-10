@@ -26,5 +26,5 @@ Check out my Tableau insights dashboard:
 
 [Tableau Viz Dashboard](https://public.tableau.com/app/profile/harry.vahedi/viz/2022CyclisticBikeShareData/Dashboard2)
 
-
+# Check out this Case Study Completed with R [here.](https://github.com/hossvah/Cyclistic-Ride-Share-Big-Data-R/tree/main)
 
